@@ -4,14 +4,15 @@ jobs:
   Connexion:
     runs-on: ubuntu-latest
     steps:
-      - name: Connexion SSH avec le serveur
-        uses: appleboy/ssh-action@master
-        with:
-          host: "ssh-${{ secrets.USERNAME }}.alwaysdata.net"
-          username: ${{ secrets.USERNAME }}
-          password: ${{ secrets.PASSWORD }}
-          script: |
-            cd $HOME/www/
+      
+name: Connexion SSH avec le serveur
+      uses: appleboy/ssh-action@master
+      with:
+        host: "ssh-${{ secrets.USERNAME }}.alwaysdata.net"
+        username: ${{ secrets.USERNAME }}
+        key: ${{ secrets.ALWAYSDATA_KEY }}
+        script: |
+          cd $HOME/www//
   Copy:
     needs: Connexion
     runs-on: ubuntu-latest
