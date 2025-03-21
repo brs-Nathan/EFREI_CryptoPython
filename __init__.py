@@ -1,6 +1,6 @@
 from cryptography.fernet import Fernet
 from flask import Flask
-import base64
+import base64  
 
 app = Flask(__name__)
 
@@ -13,23 +13,23 @@ def generer_fernet(cle_utilisateur):
         cle_bytes = base64.urlsafe_b64decode(cle_utilisateur)
         return Fernet(cle_bytes)
     except Exception:
-        return None  # Retourne None si la clé est invalide
+        return None  
 
-@app.route('/encrypt/<string:cle>/<string:valeur>')
+@app.route('/encrypt/<string:cle>/<string:valeur>', strict_slashes=False)
 def encryptage(cle, valeur):
     f = generer_fernet(cle)
     if f is None:
-        return "Erreur : Clé invalide. Assurez-vous d'utiliser une clé de 32 octets encodée en base64."
+        return "Erreur : Clé invalide. Utilisez une clé de 32 octets encodée en base64."
 
-    valeur_bytes = valeur.encode()  # Conversion str -> bytes
-    token = f.encrypt(valeur_bytes)  # Encrypt la valeur
+    valeur_bytes = valeur.encode()
+    token = f.encrypt(valeur_bytes)
     return f"Valeur encryptée : {token.decode()}"
 
-@app.route('/decrypt/<string:cle>/<string:token>')
+@app.route('/decrypt/<string:cle>/<string:token>', strict_slashes=False)
 def decryptage(cle, token):
     f = generer_fernet(cle)
     if f is None:
-        return "Erreur : Clé invalide. Assurez-vous d'utiliser une clé de 32 octets encodée en base64."
+        return "Erreur : Clé invalide. Utilisez une clé de 32 octets encodée en base64."
 
     try:
         token_bytes = token.encode()
